@@ -84,7 +84,8 @@ func TestRenderTree(t *testing.T) {
 					},
 					Proposal: Some(forgedomain.Proposal{
 						Data: forgedomain.ProposalData{
-							URL: "https://www.github.com/git-town/pull/1",
+							Title: "Feature 1 proposal",
+							URL:   "https://www.github.com/git-town/pull/1",
 						},
 					}),
 				},
@@ -94,7 +95,7 @@ func TestRenderTree(t *testing.T) {
 		want := `
 -------------------------
 - main
-  - **feature-1** :point_left:
+  - **Feature 1 proposal** :point_left:
     - https://www.github.com/git-town/pull/1A
     - https://www.github.com/git-town/pull/1B
 

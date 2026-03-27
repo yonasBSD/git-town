@@ -40,7 +40,8 @@ func (tf *testFinder) FindProposal(source, _ gitdomain.LocalBranchName) (Option[
 	tf.count++
 	return Some(forgedomain.Proposal{
 		Data: forgedomain.ProposalData{
-			URL: "https://www.github.com/git-town/git-town/pull/" + strconv.Itoa(tf.count),
+			Title: gitdomain.ProposalTitle(source.String() + " proposal title"),
+			URL:   "https://www.github.com/git-town/git-town/pull/" + strconv.Itoa(tf.count),
 		},
 	}), nil
 }
@@ -83,7 +84,7 @@ func TestRender(t *testing.T) {
 
 -------------------------
 - main
-  - **feature-a** :point_left:
+  - **feature-a proposal title** :point_left:
     - https://www.github.com/git-town/git-town/pull/2
     - https://www.github.com/git-town/git-town/pull/3
 
