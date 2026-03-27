@@ -1,5 +1,16 @@
 # Git Town Changelog
 
+## 22.7.1 (20226-03-26)
+
+#### Bug Fixes
+
+- Breadcrumbs now display the proposal title for the current branch when available ([#6107](https://github.com/git-town/git-town/pull/6107)).
+- Fixed commit message formatting in the `glab` connector ([#6105](https://github.com/git-town/git-town/pull/6105)).
+
+#### Contributors
+
+Shoutout to @alexgeek, @kevgo, @yaadata for contributing code, feedback, and ideas to 4 shipped pull requests!
+
 ## 22.7.0 (2026-03-21)
 
 #### New Features
