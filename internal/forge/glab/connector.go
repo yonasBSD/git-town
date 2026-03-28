@@ -53,7 +53,11 @@ func (self Connector) CreateProposal(data forgedomain.CreateProposalArgs) error 
 	if !hasTitle || !hasBody {
 		args = append(args, "--fill")
 	}
-	args = append(args, "--web")
+	if data.Headless {
+		args = append(args, "--yes")
+	} else {
+		args = append(args, "--web")
+	}
 	return self.Frontend.Run("glab", args...)
 }
 
