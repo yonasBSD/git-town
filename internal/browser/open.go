@@ -3,10 +3,10 @@ package browser
 
 import (
 	"fmt"
-	"os/exec"
 	"runtime"
 
 	"github.com/git-town/git-town/v22/internal/config/configdomain"
+	"github.com/git-town/git-town/v22/internal/filesystem"
 	"github.com/git-town/git-town/v22/internal/messages"
 	"github.com/git-town/git-town/v22/internal/subshell/subshelldomain"
 	. "github.com/git-town/git-town/v22/pkg/prelude"
@@ -33,14 +33,29 @@ func OpenBrowserCommand(config Option[configdomain.Browser]) Option[string] {
 		//       So we are using "start" here.
 		return Some("start")
 	}
-	openBrowserCommands := make([]string, 0, 11)
-	if browser, hasBrowser := config.Get(); hasBrowser {
-		if browser.NoBrowser() {
-			return None[string]()
-		}
-		openBrowserCommands = append(openBrowserCommands, browser.String())
+	browserCommands, useBrowser := browserCommandsToUse(config).Get()
+	if !useBrowser {
+		return None[string]()
 	}
-	openBrowserCommands = append(openBrowserCommands,
+	return filesystem.FirstExistingExecutable(browserCommands)
+}
+
+// browserCommandsToUse provides the browser commands to use based on the config.
+// A None result means that the user wants to use no browser.
+func browserCommandsToUse(browserConfig Option[configdomain.Browser]) Option[[]string] {
+	userBrowser, hasUserBrowser := browserConfig.Get()
+	if !hasUserBrowser {
+		return Some(defaultBrowserCommands())
+	}
+	if userBrowser.NoBrowser() {
+		return None[[]string]()
+	}
+	return Some(append([]string{userBrowser.String()}, defaultBrowserCommands()...))
+}
+
+// defaultBrowserCommands provides the default browser commands Git Town knows about.
+func defaultBrowserCommands() []string {
+	return []string{
 		"wsl-open",           // for Windows Subsystem for Linux, see https://github.com/git-town/git-town/issues/1344
 		"garcon-url-handler", // opens links in the native browser from Crostini on ChromeOS
 		"xdg-open",
@@ -51,12 +66,5 @@ func OpenBrowserCommand(config Option[configdomain.Browser]) Option[string] {
 		"opera",
 		"mozilla",
 		"netscape",
-	)
-	for _, browserCommand := range openBrowserCommands {
-		executable, err := exec.LookPath(browserCommand)
-		if err == nil && len(executable) > 0 {
-			return Some(browserCommand)
-		}
 	}
-	return None[string]()
 }
