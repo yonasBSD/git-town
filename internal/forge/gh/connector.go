@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	"github.com/git-town/git-town/v22/internal/cli/print"
+	"github.com/git-town/git-town/v22/internal/config/configdomain"
 	"github.com/git-town/git-town/v22/internal/forge/forgedomain"
 	"github.com/git-town/git-town/v22/internal/forge/github"
 	"github.com/git-town/git-town/v22/internal/git/gitdomain"
@@ -29,6 +30,7 @@ var (
 type Connector struct {
 	Backend  subshelldomain.Querier
 	Frontend subshelldomain.Runner
+	Headless configdomain.ProposeHeadless
 	Log      print.Logger
 }
 
@@ -60,7 +62,7 @@ func (self Connector) CreateProposal(data forgedomain.CreateProposalArgs) error 
 		return err
 	}
 	args = []string{"pr", "view"}
-	if !data.Headless {
+	if !self.Headless {
 		args = append(args, "--web")
 	}
 	return self.Frontend.Run("gh", args...)

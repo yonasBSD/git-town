@@ -88,7 +88,7 @@ func Cmd() *cobra.Command {
 				DryRun:            dryRun,
 				IgnoreUncommitted: None[configdomain.IgnoreUncommitted](),
 				Order:             None[configdomain.Order](),
-				ProposeHeadless:   None[forgedomain.ProposeHeadless](),
+				ProposeHeadless:   None[configdomain.ProposeHeadless](),
 				PushBranches:      pushBranches,
 				Stash:             None[configdomain.Stash](),
 				Verbose:           verbose,
@@ -285,6 +285,7 @@ func determineSyncData(repo execute.OpenRepoResult, args determineSyncDataArgs) 
 		GithubToken:          config.GithubToken,
 		GitlabConnectorType:  config.GitlabConnectorType,
 		GitlabToken:          config.GitlabToken,
+		Headless:             config.ProposeHeadless,
 		Log:                  print.Logger{},
 		RemoteURL:            config.DevURL(repo.Backend),
 	})

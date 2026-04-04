@@ -131,6 +131,7 @@ EnterForgeData:
 		githubToken:          githubToken.Or(data.Config.GitGlobal.GithubToken),
 		gitlabConnectorType:  gitlabConnectorTypeOpt.Or(data.Config.GitGlobal.GitlabConnectorType),
 		gitlabToken:          gitlabToken.Or(data.Config.GitGlobal.GitlabToken),
+		headless:             data.Config.NormalConfig.ProposeHeadless,
 		inputs:               data.Inputs,
 		remoteURL:            data.Config.NormalConfig.RemoteURL(data.Backend, devRemote.GetOr(config.DefaultNormalConfig().DevRemote)),
 	})
@@ -322,7 +323,7 @@ EnterForgeData:
 		PerennialRegex:              perennialRegex,
 		ProposalBreadcrumb:          proposalBreadcrumb,
 		ProposalBreadcrumbDirection: proposalBreadcrumbDirection,
-		ProposeHeadless:             None[forgedomain.ProposeHeadless](), // the setup assistant doesn't ask for this
+		ProposeHeadless:             None[configdomain.ProposeHeadless](), // the setup assistant doesn't ask for this
 		PushBranches:                pushBranches,
 		PushHook:                    pushHook,
 		ShareNewBranches:            shareNewBranches,
@@ -886,6 +887,7 @@ func testForgeAuth(args testForgeAuthArgs) (configdomain.ProgramFlow, dialogdoma
 		GithubToken:          args.githubToken,
 		GitlabConnectorType:  args.gitlabConnectorType,
 		GitlabToken:          args.gitlabToken,
+		Headless:             args.headless,
 		Log:                  print.Logger{},
 		RemoteURL:            args.devURL,
 	})
@@ -926,6 +928,7 @@ type testForgeAuthArgs struct {
 	githubToken          Option[forgedomain.GithubToken]
 	gitlabConnectorType  Option[forgedomain.GitlabConnectorType]
 	gitlabToken          Option[forgedomain.GitlabToken]
+	headless             configdomain.ProposeHeadless
 	inputs               dialogcomponents.Inputs
 	remoteURL            Option[giturl.Parts]
 }

@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/git-town/git-town/v22/internal/cli/print"
+	"github.com/git-town/git-town/v22/internal/config/configdomain"
 	"github.com/git-town/git-town/v22/internal/forge/forgedomain"
 	"github.com/git-town/git-town/v22/internal/forge/gitlab"
 	"github.com/git-town/git-town/v22/internal/git/gitdomain"
@@ -25,6 +26,7 @@ var (
 type Connector struct {
 	Backend  subshelldomain.Querier
 	Frontend subshelldomain.Runner
+	Headless configdomain.ProposeHeadless
 	Log      print.Logger
 }
 
@@ -53,7 +55,7 @@ func (self Connector) CreateProposal(data forgedomain.CreateProposalArgs) error 
 	if !hasTitle || !hasBody {
 		args = append(args, "--fill")
 	}
-	if data.Headless {
+	if self.Headless {
 		args = append(args, "--yes")
 	} else {
 		args = append(args, "--web")
