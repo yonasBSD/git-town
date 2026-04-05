@@ -95,6 +95,7 @@ func NewPartialConfigFromSnapshot(snapshot configdomain.SingleSnapshot, updateOu
 	forgeType, errForgeType := load(snapshot, configdomain.KeyForgeType, forgedomain.ParseForgeType, ignoreUnknown)
 	githubConnectorType, errGithubConnectorType := load(snapshot, configdomain.KeyGithubConnectorType, forgedomain.ParseGithubConnectorType, ignoreUnknown)
 	gitlabConnectorType, errGitlabConnectorType := load(snapshot, configdomain.KeyGitlabConnectorType, forgedomain.ParseGitlabConnectorType, ignoreUnknown)
+	headless, errHeadless := load(snapshot, configdomain.KeyHeadless, gohacks.ParseBoolOpt[configdomain.Headless], ignoreUnknown)
 	ignoreUncommitted, errIgnoreUncommitted := load(snapshot, configdomain.KeyIgnoreUncommitted, gohacks.ParseBoolOpt[configdomain.IgnoreUncommitted], ignoreUnknown)
 	lineage, errLineage := NewLineageFromSnapshot(snapshot, updateOutdated, runner)
 	newBranchTypeValue, errNewBranchType := load(snapshot, configdomain.KeyNewBranchType, configdomain.ParseBranchType, ignoreUnknown)
@@ -105,7 +106,6 @@ func NewPartialConfigFromSnapshot(snapshot configdomain.SingleSnapshot, updateOu
 	perennialRegex, errPerennialRegex := load(snapshot, configdomain.KeyPerennialRegex, configdomain.ParsePerennialRegex, ignoreUnknown)
 	proposalBreadcrumb, errProposalBreadcrumb := load(snapshot, configdomain.KeyProposalBreadcrumb, configdomain.ParseProposalBreadcrumb, ignoreUnknown)
 	proposalBreadcrumbDirection, errProposalBreadcrumbDirection := load(snapshot, configdomain.KeyProposalBreadcrumbDirection, configdomain.ParseProposalBreadcrumbDirection, ignoreUnknown)
-	proposeHeadless, errProposeHeadless := load(snapshot, configdomain.KeyProposeHeadless, gohacks.ParseBoolOpt[configdomain.ProposeHeadless], ignoreUnknown)
 	pushBranches, errPushBranches := load(snapshot, configdomain.KeyPushBranches, gohacks.ParseBoolOpt[configdomain.PushBranches], ignoreUnknown)
 	pushHook, errPushHook := load(snapshot, configdomain.KeyPushHook, gohacks.ParseBoolOpt[configdomain.PushHook], ignoreUnknown)
 	shareNewBranches, errShareNewBranches := load(snapshot, configdomain.KeyShareNewBranches, configdomain.ParseShareNewBranches, ignoreUnknown)
@@ -132,6 +132,7 @@ func NewPartialConfigFromSnapshot(snapshot configdomain.SingleSnapshot, updateOu
 		errForgeType,
 		errGithubConnectorType,
 		errGitlabConnectorType,
+		errHeadless,
 		errIgnoreUncommitted,
 		errLineage,
 		errNewBranchType,
@@ -141,7 +142,6 @@ func NewPartialConfigFromSnapshot(snapshot configdomain.SingleSnapshot, updateOu
 		errPerennialRegex,
 		errProposalBreadcrumb,
 		errProposalBreadcrumbDirection,
-		errProposeHeadless,
 		errPushBranches,
 		errPushHook,
 		errShareNewBranches,
@@ -180,6 +180,7 @@ func NewPartialConfigFromSnapshot(snapshot configdomain.SingleSnapshot, updateOu
 		GitUserEmail:                gitdomain.ParseGitUserEmail(snapshot[configdomain.KeyGitUserEmail]),
 		GitUserName:                 gitdomain.ParseGitUserName(snapshot[configdomain.KeyGitUserName]),
 		GiteaToken:                  forgedomain.ParseGiteaToken(snapshot[configdomain.KeyGiteaToken]),
+		Headless:                    headless,
 		HostingOriginHostname:       configdomain.ParseHostingOriginHostname(snapshot[configdomain.KeyHostingOriginHostname]),
 		IgnoreUncommitted:           ignoreUncommitted,
 		Lineage:                     lineage,
@@ -192,7 +193,6 @@ func NewPartialConfigFromSnapshot(snapshot configdomain.SingleSnapshot, updateOu
 		PerennialRegex:              perennialRegex,
 		ProposalBreadcrumb:          proposalBreadcrumb,
 		ProposalBreadcrumbDirection: proposalBreadcrumbDirection,
-		ProposeHeadless:             proposeHeadless,
 		PushBranches:                pushBranches,
 		PushHook:                    pushHook,
 		ShareNewBranches:            shareNewBranches,

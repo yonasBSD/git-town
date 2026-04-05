@@ -36,6 +36,7 @@ const (
 	githubToken                 = "GIT_TOWN_GITHUB_TOKEN"
 	gitlabConnectorType         = "GIT_TOWN_GITLAB_CONNECTOR"
 	gitlabToken                 = "GIT_TOWN_GITLAB_TOKEN"
+	headless                    = "GIT_TOWN_HEADLESS"
 	ignoreUncommitted           = "GIT_TOWN_IGNORE_UNCOMMITTED"
 	mainBranch                  = "GIT_TOWN_MAIN_BRANCH"
 	newBranchType               = "GIT_TOWN_NEW_BRANCH_TYPE"
@@ -47,7 +48,6 @@ const (
 	perennialRegex              = "GIT_TOWN_PERENNIAL_REGEX"
 	proposalBreadcrumb          = "GIT_TOWN_PROPOSAL_BREADCRUMB"
 	proposalBreadcrumbDirection = "GIT_TOWN_PROPOSAL_BREADCRUMB_DIRECTION"
-	proposeHeadless             = "GIT_TOWN_PROPOSE_HEADLESS"
 	pushBranches                = "GIT_TOWN_PUSH_BRANCHES"
 	pushHook                    = "GIT_TOWN_PUSH_HOOK"
 	shareNewBranches            = "GIT_TOWN_SHARE_NEW_BRANCHES"
@@ -86,6 +86,7 @@ func Load(env EnvVars) (configdomain.PartialConfig, error) {
 	gitUserName := gitAuthorNameValue.Or(gitCommitterNameValue)
 	githubConnectorType, errGithubConnectorType := load(env, githubConnectorType, forgedomain.ParseGithubConnectorType)
 	gitlabConnectorType, errGitlabConnectorType := load(env, gitlabConnectorType, forgedomain.ParseGitlabConnectorType)
+	headless, errHeadless := load(env, headless, gohacks.ParseBoolOpt[configdomain.Headless])
 	ignoreUncommitted, errIgnoreUncommitted := load(env, ignoreUncommitted, gohacks.ParseBoolOpt[configdomain.IgnoreUncommitted])
 	newBranchType, errNewBranchType := load(env, newBranchType, configdomain.ParseBranchType)
 	observedRegex, errObservedRegex := load(env, observedRegex, configdomain.ParseObservedRegex)
@@ -94,7 +95,6 @@ func Load(env EnvVars) (configdomain.PartialConfig, error) {
 	perennialRegex, errPerennialRegex := load(env, perennialRegex, configdomain.ParsePerennialRegex)
 	proposalBreadcrumb, errProposalBreadcrumb := load(env, proposalBreadcrumb, configdomain.ParseProposalBreadcrumb)
 	proposalBreadcrumbDirection, errProposalBreadcrumbDirection := load(env, proposalBreadcrumbDirection, configdomain.ParseProposalBreadcrumbDirection)
-	proposeHeadless, errProposeHeadless := load(env, proposeHeadless, gohacks.ParseBoolOpt[configdomain.ProposeHeadless])
 	pushBranches, errPushBranches := load(env, pushBranches, gohacks.ParseBoolOpt[configdomain.PushBranches])
 	pushHook, errPushHook := load(env, pushHook, gohacks.ParseBoolOpt[configdomain.PushHook])
 	shareNewBranches, errShareNewBranches := load(env, shareNewBranches, configdomain.ParseShareNewBranches)
@@ -122,6 +122,7 @@ func Load(env EnvVars) (configdomain.PartialConfig, error) {
 		errForgeType,
 		errGithubConnectorType,
 		errGitlabConnectorType,
+		errHeadless,
 		errIgnoreUncommitted,
 		errNewBranchType,
 		errObservedRegex,
@@ -130,7 +131,6 @@ func Load(env EnvVars) (configdomain.PartialConfig, error) {
 		errPerennialRegex,
 		errProposalBreadcrumb,
 		errProposalBreadcrumbDirection,
-		errProposeHeadless,
 		errPushBranches,
 		errPushHook,
 		errShareNewBranches,
@@ -182,7 +182,7 @@ func Load(env EnvVars) (configdomain.PartialConfig, error) {
 		PerennialRegex:              perennialRegex,
 		ProposalBreadcrumb:          proposalBreadcrumb,
 		ProposalBreadcrumbDirection: proposalBreadcrumbDirection,
-		ProposeHeadless:             proposeHeadless,
+		Headless:                    headless,
 		PushBranches:                pushBranches,
 		PushHook:                    pushHook,
 		ShareNewBranches:            shareNewBranches,
